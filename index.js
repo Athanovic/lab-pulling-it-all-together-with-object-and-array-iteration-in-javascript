@@ -92,7 +92,6 @@ function gameObject() {
   }
   
   // ----------------- Bonus Functions -----------------
-  
   function mostPointsScored() {
     const game = gameObject();
     let maxPoints = 0, topPlayer = "";
@@ -125,16 +124,23 @@ function gameObject() {
     return longestName;
   }
   
+  // Fixed for older JS (no optional chaining)
   function doesLongNameStealATon() {
     const game = gameObject();
     const longestName = playerWithLongestName();
     let maxSteals = 0;
+  
     for (let team of [game.home, game.away]) {
       for (let player in team.players) {
         if (team.players[player].steals > maxSteals) maxSteals = team.players[player].steals;
       }
     }
-    return game.home.players[longestName]?.steals === maxSteals || game.away.players[longestName]?.steals === maxSteals;
+  
+    const homePlayer = game.home.players[longestName];
+    const awayPlayer = game.away.players[longestName];
+  
+    return (homePlayer && homePlayer.steals === maxSteals) ||
+           (awayPlayer && awayPlayer.steals === maxSteals);
   }
   
   // ----------------- Export All Functions -----------------
